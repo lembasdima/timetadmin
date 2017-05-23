@@ -15,12 +15,16 @@
                             <th>ID</th>
                             <th>Code</th>
                             <th>Name</th>
+                            <th>Actions</th>
                         </tr>
                         @foreach($departments as $department)
                             <tr>
                                 <td>{{$department->id}}</td>
                                 <td>{{$department->department_code}}</td>
                                 <td>{{$department->department_name}}</td>
+                                <td>
+                                    <a href="/admin/editDepartment/{{$department->department_id}}"><span class="label label-warning"><i class="icon fa fa-edit"></i> Edit</span></a>
+                                </td>
                             </tr>
                         @endforeach
                         </tbody>

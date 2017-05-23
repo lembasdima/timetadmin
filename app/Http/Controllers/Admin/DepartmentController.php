@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Departments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -69,5 +70,43 @@ class DepartmentController extends Controller
             }
         }
         return view('404');
+    }
+
+    public function editDepartment(Request $request){
+
+        if(Auth::user()->hasRole(1)) {
+
+            $department = DB::table('departments')
+                ->where('id', $request->id)
+                ->first();
+
+            return view('admin/edit/editDepartment', [
+                'department' => $department
+            ]);
+        }
+        return view('404');
+    }
+
+    public function saveEditDepartment(Request $request){
+
+        $department = Departments::find($request->depId);
+
+        if($department->validate($request->all())){
+
+            $department->department_name = $request->depName;
+            $department->department_code = $request->depCode;
+            $department->timestamps = false;
+            $department->update();
+
+            return redirect()->action('Admin\DepartmentController@showDepartments');
+        }
+        else {
+
+            return Redirect::back()
+                ->withErrors($department->errors())
+                ->withInput();
+        }
+
+
     }
 }
